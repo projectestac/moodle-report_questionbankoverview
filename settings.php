@@ -22,18 +22,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-if ($hassiteconfig) {
-    $ADMIN->add(
-        'reports',
-        new admin_externalpage(
-            'reportquestionbankoverview',
-            get_string('pluginname', 'report_questionbankoverview'),
-            $CFG->wwwroot . '/report/questionbankoverview/index.php',
-            'report/questionbankoverview:view'
-        )
-    );
-}
+$ADMIN->add(
+    'reports',
+    new admin_externalpage(
+        'questionbankoverview',
+        get_string('pluginname', 'report_questionbankoverview'),
+        $CFG->wwwroot . '/report/questionbankoverview/index.php',
+        'report/questionbankoverview:view'
+    )
+);
 
 $settings = null;

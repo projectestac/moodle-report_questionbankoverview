@@ -32,3 +32,5 @@ $string['courseurl'] = 'URL del curs';
 $string['quizurl'] = 'URL del qüestionari';
 $string['coursecaturl'] = 'URL de la categoria de cursos';
 $string['quiz'] = 'Qüestionari';
+$string['totalquestions'] = 'Nombre total de preguntes a la base de dades: {$a}';
+$string['totalrandomquestions'] = 'Nombre total de preguntes aleatòries: {$a}';

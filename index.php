@@ -26,7 +26,7 @@ require_once '../../config.php';
 require_once $CFG->libdir.'/adminlib.php';
 require_once __DIR__ . '/locallib.php';
 
-admin_externalpage_setup('reportquestionbankoverview');
+admin_externalpage_setup('questionbankoverview');
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'report_questionbankoverview'));
@@ -40,6 +40,12 @@ $context_levels = [
     CONTEXT_MODULE => 'CONTEXT_MODULE',
     CONTEXT_BLOCK => 'CONTEXT_BLOCK',
 ];
+
+// Count the number of questions in the questions table.
+$total_questions = $DB->count_records('question');
+
+// Count the number of random questions (records in question_set_references).
+$total_random_questions = $DB->count_records('question_set_references');
 
 // Fetch all question categories with their context levels and instance id.
 $categories = $DB->get_records_sql('
@@ -88,6 +94,7 @@ $table->head = [
     get_string('courseurl', 'report_questionbankoverview'),
     get_string('quizurl', 'report_questionbankoverview'),
     get_string('coursecaturl', 'report_questionbankoverview'),
+    get_string('delete'),
     get_string('info')
 ];
 $table->data = [];
@@ -105,6 +112,18 @@ foreach ($category_tree as $category) {
         html_writer::link($category['coursecat_url'], get_string('category')) :
         '';
 
+    if (is_siteadmin($USER->id)) {
+        $delete_link = html_writer::link(
+            new moodle_url(
+                '/question/bank/purgecategory/confirm.php',
+                ['purge' => $category['id'], 'courseid' => $category['course_id']]
+            ),
+            get_string('delete')
+        );
+    } else {
+        $delete_link = '';
+    }
+
     $table->data[] = [
         $category['name'],
         $category['contextlevel'],
@@ -112,9 +131,17 @@ foreach ($category_tree as $category) {
         $course_link,
         $quiz_link,
         $coursecat_link,
+        $delete_link,
         $category['info'],
     ];
 }
+
+// Print a box that shows the totals.
+$text = get_string('totalquestions', 'report_questionbankoverview', $total_questions) .
+    '<br>' .
+    get_string('totalrandomquestions', 'report_questionbankoverview', $total_random_questions);
+
+echo html_writer::tag('div', $text, ['class' => 'alert alert-info']);
 
 // Print the table.
 echo html_writer::table($table);

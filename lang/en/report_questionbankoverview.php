@@ -31,3 +31,5 @@ $string['courseurl'] = 'Course URL';
 $string['quizurl'] = 'Quiz URL';
 $string['coursecaturl'] = 'Course category URL';
 $string['quiz'] = 'Quiz';
+$string['totalquestions'] = 'Total number of questions in the database: {$a}';
+$string['totalrandomquestions'] = 'Total number of random questions: {$a}';

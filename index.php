@@ -99,6 +99,11 @@ $table->head = [
 ];
 $table->data = [];
 
+// Check if the qbank_purgecategory plugin is installed.
+$pluginman = \core_plugin_manager::instance();
+$plugininfo = $pluginman->get_plugin_info('qbank_purgecategory');
+$is_purgecategory_installed = (bool)$plugininfo;
+
 // Populate the table with the category tree.
 foreach ($category_tree as $category) {
 
@@ -112,7 +117,8 @@ foreach ($category_tree as $category) {
         html_writer::link($category['coursecat_url'], get_string('category')) :
         '';
 
-    if (is_siteadmin($USER->id)) {
+    // Specific code for Àgora project.
+    if ($is_purgecategory_installed && get_protected_agora()) {
         $delete_link = html_writer::link(
             new moodle_url(
                 '/question/bank/purgecategory/confirm.php',
